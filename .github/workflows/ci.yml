@@ -3,7 +3,7 @@ name: Continuous Integration
 on:
   pull_request:
     branches:
-      - prod
+      - prodcamp
 
 jobs:
   test:
@@ -52,7 +52,7 @@ jobs:
         run: |
           cd ios && pod install --repo-update
           xcodebuild -workspace reactgitactions.xcworkspace -scheme reactgitactions -sdk iphoneos -configuration Release archive -archivePath $PWD/build/reactgitactions.xcarchive
-          
+          xcodebuild -exportArchive -archivePath $PWD/build/reactgitactions.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
