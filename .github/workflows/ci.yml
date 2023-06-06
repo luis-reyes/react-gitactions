@@ -40,9 +40,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Android SDK platform tools
-        run: |
-          sdkmanager "platform-tools"
+      - name: Set up Android SDK
+        uses: android-actions/setup-android-sdk@v2
+        with:
+          sdk-platform: "android-31"
+          ndk-version: "21.4.7075529"
 
       - name: Start Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
@@ -53,3 +55,22 @@ jobs:
 
       - name: Build Android application
         run: npx react-native run-android --variant=release
+
+  build-ios:
+    needs: test
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build iOS application
+        run: npx react-native run-ios --configuration=Release
