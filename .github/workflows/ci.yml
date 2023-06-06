@@ -1,9 +1,6 @@
 name: Continuous Integration
 
 on:
-  push:
-    branches:
-      - prod
   pull_request:
     branches:
       - prod
@@ -41,7 +38,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: app-release.apk
+          name: react-gitactions.apk
           path: android/app/build/outputs/apk/release/
   build-ios:
     needs: test
