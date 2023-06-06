@@ -24,22 +24,6 @@ jobs:
       - name: Run tests
         run: npm test
 
-  build-android:
-    needs: test
-    runs-on: ubuntu-latest
-    steps: 
-      - uses: actions/checkout@v3
-      - name: Install npm dependencies
-        run: |
-          npm install
-      - name: Build Android Release
-        run: |
-          cd android && ./gradlew assembleRelease
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: react-gitactions.apk
-          path: android/app/build/outputs/apk/release/
   build-ios:
     needs: test
     runs-on: macos-latest
