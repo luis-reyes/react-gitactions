@@ -40,11 +40,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android-sdk@v2
-        with:
-          sdk-platform: "android-31"
-          ndk-version: "21.4.7075529"
+      - name: Install Android SDK
+        run: sdkmanager "platform-tools"
 
       - name: Start Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
