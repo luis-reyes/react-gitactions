@@ -1,5 +1,12 @@
-build-android:
-    needs: test
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,12 +21,5 @@ build-android:
       - name: Install dependencies
         run: npm install
 
-      - name: Start Android Emulator
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 31
-          arch: x86_64
-          profile: Nexus_5X_API_31
-
-      - name: Build Android application
-        run: npx react-native run-android --variant=release
+      - name: Run tests
+        run: npm test
