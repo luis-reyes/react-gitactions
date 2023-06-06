@@ -40,24 +40,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Start Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: Nexus_5X_API_31
+
       - name: Build Android application
         run: npx react-native run-android --variant=release
-
-  build-ios:
-    needs: test
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build iOS application
-        run: npx react-native run-ios --configuration=Release
