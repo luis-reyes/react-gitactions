@@ -3,10 +3,10 @@ name: Continuous Integration
 on:
   push:
     branches:
-      - release
+      - prod
   pull_request:
     branches:
-      - release
+      - prod
 
 jobs:
   test:
