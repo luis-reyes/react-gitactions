@@ -35,8 +35,9 @@ jobs:
           name: reactgitactions
           path: reactgitactions.xcarchive
       - name: Upload to TestFlight
-        uses: jansauer/appstore@v1
-        with:
-          appFilePath: reactgitactions.xcarchive/Products/Applications/reactgitactions.app
-          username: ${{ secrets.APPLE_ID }}
-          password: ${{ secrets.APPLE_PASSWORD }}
+        run: |
+          sudo gem install fastlane
+          fastlane pilot upload --ipa reactgitactions.xcarchive/Products/Applications/reactgitactions.app --username ${{ secrets.APPLE_ID }} --skip_submission
+        env:
+          FASTLANE_DONT_STORE_PASSWORD: true
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
