@@ -8,10 +8,8 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -21,11 +19,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install CocoaPods dependencies
-        run: |
-          cd ios
-          pod install
-
       - name: Build iOS (debug)
         run: |
           xcodebuild \
@@ -34,20 +27,15 @@ jobs:
             clean archive \
             -sdk iphoneos \
             -configuration Debug \
-            -archivePath $PWD/reactgitactions.xcarchive \
+            -UseModernBuildSystem=NO \
+            -archivePath $PWD/reactgitactions \
             CODE_SIGNING_ALLOWED=NO
 
-      - name: Export IPA
+      - name: Upload to TestFlight
         run: |
-          xcodebuild \
-            -exportArchive \
-            -archivePath $PWD/reactgitactions.xcarchive \
-            -exportPath $PWD/build \
-            -exportOptionsPlist -
-
-      - name: Upload IPA to TestFlight
-        uses: apple/app-store-connect-upload@v1
-        with:
-          api_key: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
-          ipa_path: $PWD/build/reactgitactions.ipa
-          app_id: ${{ secrets.APP_STORE_CONNECT_APP_ID }}
+          xcrun altool \
+            --upload-app \
+            --type ios \
+            --file $PWD/reactgitactions.xcarchive/Products/Applications/reactgitactions.app \
+            --username YOUR_APPLE_ID \
+            --password YOUR_APP_SPECIFIC_PASSWORD
