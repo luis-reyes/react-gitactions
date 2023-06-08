@@ -29,15 +29,24 @@ jobs:
           -UseModernBuildSystem=NO \
           -archivePath $PWD/reactgitactions \
           CODE_SIGNING_ALLOWED=NO"
+      - name: Generate IPA
+        run: "xcodebuild \
+          -exportArchive \
+          -archivePath $PWD/reactgitactions.xcarchive \
+          -exportOptionsPlist ExportOptions.plist \
+          -exportPath $PWD"
       - name: Archive Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: reactgitactions
           path: reactgitactions.xcarchive
+      - name: Install app-store-deploy
+        run: npm install -g app-store-deploy
       - name: Upload to TestFlight
         run: |
-          sudo gem install fastlane
-          fastlane pilot upload --ipa reactgitactions.xcarchive/Products/Applications/reactgitactions.app --username ${{ secrets.APPLE_ID }} --skip_submission
-        env:
-          FASTLANE_DONT_STORE_PASSWORD: true
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+          app-store-deploy \
+            -i ${{ secrets.APPLE_ID }} \
+            -a ${{ secrets.APPLE_TEAM_ID }} \
+            -p ${{ secrets.APP_SPECIFIC_PASSWORD }} \
+            -q \
+            -b "path/to/reactgitactions.ipa"
