@@ -42,7 +42,7 @@ jobs:
           -exportArchive \
           -archivePath $PWD/reactgitactions.xcarchive \
           -exportPath $PWD/reactgitactions \
-          -exportOptionsPlist /dev/null"
+          -exportOptionsPlist ios/"
       - name: Upload .ipa
         uses: actions/upload-artifact@v2
         with:
