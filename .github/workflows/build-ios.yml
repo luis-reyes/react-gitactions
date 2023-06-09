@@ -10,15 +10,15 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set up Node.js
+      - name: Use Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
-
-      - name: Install dependencies
-        run: npm install
-
+      - run: npm install
+      - run: xcode-select -p
+      - run: pod install
+        working-directory: ios
+        name: Install pod dependencies
       - name: Build iOS (debug)
         run: |
           xcodebuild \
@@ -30,12 +30,16 @@ jobs:
             -UseModernBuildSystem=NO \
             -archivePath $PWD/reactgitactions \
             CODE_SIGNING_ALLOWED=NO
-
-      - name: Upload to TestFlight
+      - name: Create .ipa file
         run: |
-          xcrun altool \
-            --upload-app \
-            --type ios \
-            --file $PWD/reactgitactions.xcarchive/Products/Applications/reactgitactions.app \
-            --username YOUR_APPLE_ID \
-            --password YOUR_APP_SPECIFIC_PASSWORD
+          xcodebuild \
+            -exportArchive \
+            -archivePath $PWD/reactgitactions.xcarchive \
+            -exportOptionsPlist ExportOptions.plist \
+            -exportPath $PWD/ipa-output
+
+      - name: Upload .ipa artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: reactgitactions.ipa
+          path: ios/ipa-output/reactgitactions.ipa
