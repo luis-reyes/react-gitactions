@@ -20,26 +20,22 @@ jobs:
         working-directory: ios
         name: Install pod dependencies
       - name: Build iOS (debug)
-        run: |
-          xcodebuild \
-            -workspace ios/reactgitactions.xcworkspace \
-            -scheme reactgitactions \
-            clean archive \
-            -sdk iphoneos \
-            -configuration Debug \
-            -UseModernBuildSystem=NO \
-            -archivePath $PWD/reactgitactions \
-            CODE_SIGNING_ALLOWED=NO
-      - name: Create .ipa file
-        run: |
-          xcodebuild \
-            -exportArchive \
-            -archivePath $PWD/reactgitactions.xcarchive \
-            -exportOptionsPlist ExportOptions.plist \
-            -exportPath $PWD/ipa-output
-
-      - name: Upload .ipa artifact
+        run: "xcodebuild \
+          -workspace ios/reactgitactions.xcworkspace \
+          -scheme reactgitactions \
+          -configuration Debug \
+          -sdk iphoneos \
+          -archivePath $PWD/reactgitactions.xcarchive \
+          clean archive \
+          CODE_SIGNING_ALLOWED=NO"
+      - name: Export .ipa
+        run: "xcodebuild \
+          -exportArchive \
+          -archivePath $PWD/reactgitactions.xcarchive \
+          -exportPath $PWD/reactgitactions \
+          -exportOptionsPlist /dev/null"
+      - name: Upload .ipa
         uses: actions/upload-artifact@v2
         with:
           name: reactgitactions.ipa
-          path: ios/ipa-output/reactgitactions.ipa
+          path: ios/reactgitactions/*.ipa
