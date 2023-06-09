@@ -23,21 +23,19 @@ jobs:
         run: "xcodebuild \
           -workspace ios/reactgitactions.xcworkspace \
           -scheme reactgitactions \
-          clean archive \
-          -sdk iphoneos \
           -configuration Debug \
-          -UseModernBuildSystem=NO \
-          -archivePath $PWD/reactgitactions \
+          -sdk iphoneos \
+          -archivePath $PWD/reactgitactions.xcarchive \
+          clean archive \
           CODE_SIGNING_ALLOWED=NO"
-      - name: Archive Artifacts
+      - name: Export .ipa
+        run: "xcodebuild \
+          -exportArchive \
+          -archivePath $PWD/reactgitactions.xcarchive \
+          -exportPath $PWD/reactgitactions \
+          -exportOptionsPlist /dev/null"
+      - name: Upload .ipa
         uses: actions/upload-artifact@v2
         with:
-          name: reactgitactions
-          path: reactgitactions.xcarchive
-      - name: Upload to TestFlight
-        run: |
-          sudo gem install fastlane
-          fastlane pilot upload --ipa reactgitactions.xcarchive/Products/Applications/reactgitactions.app --username ${{ secrets.APPLE_ID }} --skip_submission
-        env:
-          FASTLANE_DONT_STORE_PASSWORD: true
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+          name: reactgitactions.ipa
+          path: ios/reactgitactions/*.ipa
