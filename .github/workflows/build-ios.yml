@@ -6,45 +6,24 @@ on:
       - prod
 
 jobs:
-  build:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
-      
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-npm-
-          
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14.x
-      
-      - run: npm install
-      - run: xcode-select -p
-      - run: pod install
-        working-directory: ios
-        name: Install pod dependencies
-      - name: Build iOS (debug)
-        run: "xcodebuild \
-          -workspace ios/reactgitactions.xcworkspace \
-          -scheme reactgitactions \
-          -configuration Debug \
-          -sdk iphoneos \
-          -archivePath $PWD/reactgitactions.xcarchive \
-          clean archive \
-          CODE_SIGNING_ALLOWED=NO"
-      - name: Export .ipa
-        run: "xcodebuild \
-          -exportArchive \
-          -archivePath $PWD/reactgitactions.xcarchive \
-          -exportPath $PWD/reactgitactions \
-          -exportOptionsPlist ios/"
-      - name: Upload .ipa
-        uses: actions/upload-artifact@v2
+  build-ios:
+    needs: install-and-test
+    runs-on: [self-hosted, macos]
+    steps: 
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: |
+          npm install
+      - name: Install pod dependencies
+        run: |
+          cd ios && pod install
+      - name: Build app
+        run: |       
+          xcodebuild -workspace reactgitactions.xcworkspace -scheme reactgitactions archive -archivePath reactgitactions.xcarchive -allowProvisioningUpdates
+          xcodebuild -exportArchive -archivePath ./reactgitactions.xcarchive -exportPath . -exportOptionsPlist reactgitactions/Info.plist
+          mv reactgitactions.ipa ../reactgitactions.ipa
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
         with:
           name: reactgitactions.ipa
-          path: ios/reactgitactions/*.ipa
+          path: ios/build/
