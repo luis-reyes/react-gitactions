@@ -50,6 +50,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pods-
 
+      - name: Debug - List files in the root directory
+      run: ls -R
       - name: Install Pods
         run: pod install --repo-update
 
