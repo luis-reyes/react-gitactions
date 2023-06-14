@@ -487,7 +487,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Luis  Echenique (F5D3T2R4RJ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Luis  Echenique (F5D3T2R4RJ)";
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F5D3T2R4RJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = reactgitactions/Info.plist;
@@ -519,7 +519,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Luis  Echenique (F5D3T2R4RJ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Luis  Echenique (F5D3T2R4RJ)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = F5D3T2R4RJ;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F5D3T2R4RJ;
 				INFOPLIST_FILE = reactgitactions/Info.plist;
