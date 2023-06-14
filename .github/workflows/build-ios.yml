@@ -52,8 +52,12 @@ jobs:
 
       - name: Debug - List files in the root directory
         run: ls -R
+
       - name: Install Pods
-        run: pod install --repo-update && cd ..
+        run: pod install --repo-update
+
+      - name: Update fastlane
+        run: fastlane update_fastlane
 
       - name: Build IOS App
         uses: yukiarrr/ios-build-action@v1.4.0
